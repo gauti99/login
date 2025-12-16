@@ -1,0 +1,33 @@
+body {
+  font-family: Arial;
+  background: #b3b5b291;
+}
+
+.container {
+  width: 400px;
+  margin: 80px auto;
+  padding: 44px;
+  background: rgba(166, 111, 111, 0.537);
+  border-radius: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background: #464472ce;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+p button {
+  background: none;
+  color: rgb(216, 222, 226);
+}
