@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../../component/Navbar/Navbar';
 
 export function Home() {  // Changed from 'Home' (capital H) to 'Home'
-  const [username] = useState("Sumit");
+  const [username] = useState("");
 
   return (
     <>
