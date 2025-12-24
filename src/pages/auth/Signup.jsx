@@ -6,22 +6,37 @@ function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  // 👁 password visibility state
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
+
+  // 🔐 Strong password regex
+  const strongPasswordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Basic validation
     if (!name || !email || !password) {
       alert("All fields are required");
       setIsLoading(false);
       return;
     }
+
+    // Strong password validation
+    if (!strongPasswordRegex.test(password)) {
+      setPasswordError(
+        "Password must be at least 8 characters and include uppercase, lowercase, number & special character"
+      );
+      setIsLoading(false);
+      return;
+    }
+
+    setPasswordError("");
 
     try {
       const response = await axios.post(
@@ -31,13 +46,15 @@ function Signup() {
 
       alert(response.data.message);
 
+      // Reset form
       setName("");
       setEmail("");
       setPassword("");
 
+      // Redirect to login
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {
-      alert(error.response ? error.response.data.message : "Server error");
+      alert(error.response?.data?.message || "Server error");
     } finally {
       setIsLoading(false);
     }
@@ -50,8 +67,12 @@ function Signup() {
           
           {/* Header */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
-            <p className="text-gray-500 mt-2">Join our community today</p>
+            <h2 className="text-3xl font-bold text-gray-800">
+              Create Account
+            </h2>
+            <p className="text-gray-500 mt-2">
+              Join our community today
+            </p>
           </div>
 
           {/* Form */}
@@ -87,7 +108,7 @@ function Signup() {
               />
             </div>
 
-            {/* Password with Eye */}
+            {/* Password */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Password
@@ -96,13 +117,16 @@ function Signup() {
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordError("");
+                }}
                 className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="••••••••"
                 required
               />
 
-              {/* 👁 Eye Button */}
+              {/* Eye toggle */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -111,8 +135,15 @@ function Signup() {
                 {showPassword ? "🙈" : "👁️"}
               </button>
 
-              <p className="text-xs text-gray-500 mt-2">
-                Must be at least 8 characters long
+              {/* Password error */}
+              {passwordError && (
+                <p className="text-sm text-red-500 mt-2">
+                  {passwordError}
+                </p>
+              )}
+
+              <p className="text-xs overwhelming-gray-500 mt-2">
+                Min 8 chars, uppercase, lowercase, number & special char
               </p>
             </div>
 
@@ -124,7 +155,7 @@ function Signup() {
               </label>
             </div>
 
-            {/* Button */}
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -134,7 +165,7 @@ function Signup() {
             </button>
           </form>
 
-          {/* Login Link */}
+          {/* Login link */}
           <div className="text-center">
             <p className="text-gray-600">
               Already registered?{" "}
