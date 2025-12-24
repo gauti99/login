@@ -1,21 +1,27 @@
-import { useState } from "react";
-import Login from "./component/Login";
-import Signup from "./component/Signup";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+import {Home} from "./pages/dashboard/home";
+import List from "./pages/List";
 
 function App() {
-  const [isLogin, setIsLogin] = useState(true);
-
+  
   return (
-    <div className="container">
-      {isLogin ? <Login /> : <Signup />}
+    <BrowserRouter>
 
-      <p>
-        {isLogin ? "Don't have an account?" : "Already have an account?"}
-        <button onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? " Signup " : " Login "}
-        </button>
-      </p>
-    </div>
+      <div className="page-content">
+        <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route path="/list" element={<List />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+
+
+          {/* fallback */}
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
